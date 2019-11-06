@@ -3,7 +3,7 @@ import tkinter.messagebox  # 要使用messagebox先要匯入模組
 from SerialPortManager import*
 import json
 
-Device_ID = 'Level-1-Mid-Corridor-B'
+Device_ID = 'Level-2-Right-Corridor-A_Actuator_Monitor'
 
 # 第1步，例項化object，建立視窗window
 window = tk.Tk()
@@ -24,22 +24,30 @@ def show_alert ():
         while True:
             msg = SerialPortManager().readMsg()
             if msg != '':
-                deviceID = msg.strip().split('$')[0]
-                text = msg.strip().split('$')[1]
+                msg_split = msg.strip().split('$')
+                deviceID = msg_split[0]
+                text = msg_split[1]
                 print (deviceID)
                 print (text)
+                
+                case1 = 'Right-Stairs-2-1'
+                case2 = 'Level-2-Mid-Corridor-E'
+                case3 = 'Level-2-Right-Corridor-B'
+                
                 if deviceID == Device_ID:
-                    tkinter.messagebox.showwarning(title='Hi', message='警告: '+text)       # 提出警告對話窗
-                    break
-    # tkinter.messagebox.showinfo(title='Hi', message='你好！')              # 提示資訊對話窗
-    # tkinter.messagebox.showwarning(title='Hi', message='有警告！')       # 提出警告對話窗
-    # tkinter.messagebox.showerror(title='Hi', message='出錯了！')         # 提出錯誤對話窗
-    # print(tkinter.messagebox.askquestion(title='Hi', message='你好！'))  # 詢問選擇對話窗return 'yes', 'no'
-    # print(tkinter.messagebox.askyesno(title='Hi', message='你好！'))     # return 'True', 'False'
-    # print(tkinter.messagebox.askokcancel(title='Hi', message='你好！'))  # return 'True', 'False'
+                    if text == case1:
+                        print ('case 1')
+                        tkinter.messagebox.showwarning(title='Warning', message='Warning:\n Please go downstairs for evacuation!')       # 提出警告對話窗
+                        break
+                    elif text == case2:
+                        print ('case 2')
+                        tkinter.messagebox.showwarning(title='Warning', message='Warning: Please turn right for evacuation!')       # 提出警告對話窗
+                        break
+                    elif text == case3:
+                        print ('case 3')
+                        tkinter.messagebox.showwarning(title='Warning', message='Warning: Please trun left for evacuation!')       # 提出警告對話窗
+                        break
 
-# 第4步，在圖形介面上建立一個標籤用以顯示內容並放置
 tk.Button(window, text='開始火災警戒', bg='white', font=('Arial', 18), command=show_alert).pack()
 
-# 第6步，主視窗迴圈顯示
 window.mainloop()
