@@ -3,7 +3,7 @@ import tkinter.messagebox  # 要使用messagebox先要匯入模組
 from SerialPortManager import*
 import json
 
-Device_ID = 'Level-2-Right-Corridor-A_Actuator_Monitor'
+Device_ID = 'Level-1-Left-Corridor-G_Actuator_Monitor'
 
 # 第1步，例項化object，建立視窗window
 window = tk.Tk()
@@ -25,21 +25,22 @@ def show_alert ():
         try:
             while True:
                 msg = SerialPortManager().readMsg()
-                if msg != '':
+                check = msg.find('$')
+                if msg != '' and check != -1:
                     msg_split = msg.strip().split('$')
                     deviceID = msg_split[0]
                     text = msg_split[1]
                     print (deviceID)
                     print (text)
                     
-                    case1 = 'Right-Stairs-2-1'
-                    case2 = 'Level-2-Mid-Corridor-E'
-                    case3 = 'Level-2-Right-Corridor-B'
+                    case1 = 'Left-Stairs-1-2'
+                    case2 = 'Level-1-Mid-Corridor-A'
+                    case3 = 'Level-1-Left-Corridor-F'
                     
                     if deviceID == Device_ID:
                         if text == case1:
                             print ('case 1')
-                            tkinter.messagebox.showwarning(title='Warning', message='Warning:\n Please go downstairs for evacuation!')       # 提出警告對話窗
+                            tkinter.messagebox.showwarning(title='Warning', message='Warning:\n Please go upstairs for evacuation!')       # 提出警告對話窗
                             break
                         elif text == case2:
                             print ('case 2')
@@ -60,6 +61,6 @@ def show_alert ():
             errMsg = "File \"{}\", line {}, in {}: [{}] {}".format(fileName, lineNum, funcName, error_class, detail)
             print(errMsg)
 
-tk.Button(window, text='開始火災警戒', bg='white', font=('Arial', 128), command=show_alert).pack()
+tk.Button(window, text='開始火災警戒', bg='white', font=('Arial', 64), command=show_alert).pack()
 
 window.mainloop()
